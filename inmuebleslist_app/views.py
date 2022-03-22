@@ -10,3 +10,15 @@ def inmueble_list(request):
     }
     
     return JsonResponse(data)
+
+def inmueble_detalle(request, pk):
+    inmueble = Inmueble.objects.get(pk=pk)
+    data = {
+        'direccion': inmueble.direccion,
+        'pais': inmueble.pais,
+        'imagen': inmueble.imagen,
+        'activo': inmueble.active,
+        'descripcion': inmueble.descripcion
+    }
+    
+    return JsonResponse(data)
