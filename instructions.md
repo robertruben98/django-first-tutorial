@@ -14,3 +14,4 @@ Http Status Codes en Django
 
 Core Arguments y Modelo de Serializacion [link](https://www.django-rest-framework.org/api-guide/fields)
 
+Para visualizer mejor los json [JsonViewer.stack](https://jsonviewer.stack.hu)
