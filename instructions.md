@@ -8,3 +8,6 @@ Django Rest Framework
     te entrega un marco de trabajo para la creacion de web APIs, ademas de brindarte soporte de autenticacion y
 autorizacion. [link](https://www.django-rest-framework.org)
 Instalacion: pip install djangorestframework
+
+Http Status Codes en Django
+    [Status Code](https://www.django-rest-framework.org/api-guide/status-codes)
