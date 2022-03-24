@@ -6,23 +6,28 @@ from rest_framework.views import APIView
 from rest_framework import generics, mixins
 
 
-class ComentarioList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class ComentarioCreate(generics.CreateAPIView):
+    serializer_class = ComentarioSerializer
+
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        edificacion = Edificacion.objects.get(pk=pk)
+        serializer.save(edificacion=edificacion)
+
+
+class ComentarioList(generics.ListCreateAPIView):
+    # queryset = Comentario.objects.all()
+    serializer_class = ComentarioSerializer
+
+    def get_queryset(self):
+        # kwargs captura todas las propiedades que me manda el cliente
+        pk = self.kwargs['pk']
+        return Comentario.objects.filter(edificacion=pk)
+
+
+class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-    
-    
-class ComentarioDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
-    queryset = Comentario.objects.all()
-    serializer_class = ComentarioSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs) # devuelve un comentario por el id
 
 
 class EmpresaAV(APIView):
@@ -47,30 +52,31 @@ class EmpresaDetalleAV(APIView):
         try:
             empresa = Empresa.objects.get(pk=pk)
         except Empresa.DoesNotExist:
-            return Response({'Error': 'Empresa does not exist'} ,status=status.HTTP_404_NOT_FOUND)
-        
+            return Response({'Error': 'Empresa does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = EmpresaSerializer(empresa, context={'request': request})
         return Response(serializer.data)
-    
+
     def put(self, request, pk):
         try:
             empresa = Empresa.objects.get(pk=pk)
         except Empresa.DoesNotExist:
-            return Response({'Error': 'Empresa does not exist'} ,status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = EmpresaSerializer(empresa, data=request.data, context={'request': request})
+            return Response({'Error': 'Empresa does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = EmpresaSerializer(
+            empresa, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
     def delete(self, request, pk):
         try:
             empresa = Empresa.objects.get(pk=pk)
         except Empresa.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         empresa.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
