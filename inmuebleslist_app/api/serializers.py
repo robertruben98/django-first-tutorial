@@ -2,10 +2,15 @@ from rest_framework import serializers
 from ..models import Inmueble
 
 
+def column_longitud(value):
+    if len(value) < 2:
+        raise serializers.ValidationError('El valor es demasiado corto')
+
+
 class InmuebleSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    direccion = serializers.CharField()
-    pais = serializers.CharField()
+    direccion = serializers.CharField(validators=[column_longitud])
+    pais = serializers.CharField(validators=[column_longitud])
     descripcion = serializers.CharField()
     imagen = serializers.CharField()
     active = serializers.BooleanField()
@@ -21,3 +26,16 @@ class InmuebleSerializer(serializers.Serializer):
         instance.active = validated_data.get('active', instance.active)
         instance.save()
         return instance
+    
+    def validate(self, data):
+        if data['direccion'] == data['pais']:
+            raise serializers.ValidationError('La direccion y el pais deben ser diferentes')
+        else:
+            return data
+        
+    # validate es el patron, _imagen es el nombre de la propiedad que quieres validar
+    def validate_imagen(self, data):
+        if len(data) < 2:
+            raise serializers.ValidationError('La url de la imagen es muy corta')
+        else:
+            return data
