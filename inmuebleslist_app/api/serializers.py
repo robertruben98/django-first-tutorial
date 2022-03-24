@@ -4,11 +4,19 @@ from ..models import Inmueble
 
 # ModelSerializer hace un mapeo automatico de los campos de la entidad Inmueble
 class InmuebleSerializer(serializers.ModelSerializer):
+    longitud_direccion = serializers.SerializerMethodField()
+    
     class Meta:
         model = Inmueble
         fields = "__all__"
         # fields = ['id', 'pais', 'imagen', 'active']
         # exclude = ['id']
+        
+        
+    def get_longitud_direccion(self, object):
+        cantidad_caracteres = len(object.direccion)
+        return cantidad_caracteres
+        
         
     def validate(self, data):
         if data['direccion'] == data['pais']:
