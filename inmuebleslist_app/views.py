@@ -1,10 +1,10 @@
 # from django.http import JsonResponse
 # from django.shortcuts import render
-# from .models import Inmueble
+# from .models import Edificacion
 
 # # Create your views here.
 # def inmueble_list(request):
-#     inmuebles = Inmueble.objects.all()
+#     inmuebles = Edificacion.objects.all()
 #     data = {
 #         'inmuebles': list(inmuebles.values()),
 #     }
@@ -12,7 +12,7 @@
 #     return JsonResponse(data)
 
 # def inmueble_detalle(request, pk):
-#     inmueble = Inmueble.objects.get(pk=pk)
+#     inmueble = Edificacion.objects.get(pk=pk)
 #     data = {
 #         'direccion': inmueble.direccion,
 #         'pais': inmueble.pais,
