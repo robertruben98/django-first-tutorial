@@ -11,6 +11,8 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsComentarioUserOrReadOnly
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from .throttling import ComentarioCreateThrottle, ComentarioListThrottle
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 class UsuarioComentario(generics.ListAPIView):
@@ -62,6 +64,8 @@ class ComentarioList(generics.ListCreateAPIView):
     serializer_class = ComentarioSerializer
     # permission_classes = [IsAuthenticated]
     throttle_classes = [ComentarioListThrottle]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['comentario_user__username', 'active']
 
     def get_queryset(self):
         # kwargs captura todas las propiedades que me manda el cliente
@@ -81,6 +85,18 @@ class EmpresaVS(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
+
+
+class EdificacionList(generics.ListAPIView):
+    queryset = Edificacion.objects.all()
+    serializer_class = EdificacionSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['direccion', 'empresa__nombre']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['direccion', 'empresa__nombre']
+    
+    # http://127.0.0.1:8000/tienda/edificacion/list/?search=realtor&ordering=direccion
+    # http://127.0.0.1:8000/tienda/edificacion/list/?search=realtor&ordering=-direccion descendente
 
 
 class EdificacionAV(APIView):
