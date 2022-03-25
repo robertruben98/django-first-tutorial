@@ -13,20 +13,31 @@ from .permissions import AdminOrReadOnly, ComentarioUserOrReadOnly
 
 class ComentarioCreate(generics.CreateAPIView):
     serializer_class = ComentarioSerializer
-    
+
     def get_queryset(self):
         return Comentario.objects.all()
 
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         edificacion = Edificacion.objects.get(pk=pk)
-        
+
         user = self.request.user
-        comentario_queryset = Comentario.objects.filter(edificacion=edificacion, comentario_user=user)
-        
+        comentario_queryset = Comentario.objects.filter(
+            edificacion=edificacion, comentario_user=user)
+
         if comentario_queryset.exists():
-            raise ValidationError("El usuario ya escribio un comentario para este inmueble")
-        
+            raise ValidationError(
+                "El usuario ya escribio un comentario para este inmueble")
+
+        if edificacion.number_calificacion == 0:
+            edificacion.avg_calificacion = serializer.validated_data['calificacion']
+        else:
+            edificacion.avg_calificacion = (
+                serializer.validated_data['calificacion'] + edificacion.avg_calificacion) / 2
+            
+        edificacion.number_calificacion = edificacion.number_calificacion + 1
+        edificacion.save()
+
         serializer.save(edificacion=edificacion, comentario_user=user)
 
 
