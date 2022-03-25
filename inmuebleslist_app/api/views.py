@@ -8,6 +8,7 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
+from .permissions import AdminOrReadOnly
 
 
 class ComentarioCreate(generics.CreateAPIView):
@@ -45,7 +46,7 @@ class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class EmpresaVS(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
 
