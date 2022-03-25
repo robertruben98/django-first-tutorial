@@ -156,7 +156,10 @@ REST_FRAMEWORK = {
         'comentario-create': '100002/day',
         'comentario-list': '100008/day',
         'comentario-detail': '100003/day',
-    }
+    },
+    # Esto hace que todas las consultas tenga paginacion
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 1,
 }
 
 SIMPLE_JWT = {
