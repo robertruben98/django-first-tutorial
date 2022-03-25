@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -159,5 +160,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ROTATE_REFRESH_TOKENS': True # obliga que se genere un nuevo token por cada token que se haya generado
+    'ROTATE_REFRESH_TOKENS': True, # obliga que se genere un nuevo token por cada token que se haya generado
+    # esto es solo para le modo desarrollo
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=365),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
 }
