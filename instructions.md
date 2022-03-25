@@ -15,3 +15,6 @@ Http Status Codes en Django
 Core Arguments y Modelo de Serializacion [link](https://www.django-rest-framework.org/api-guide/fields)
 
 Para visualizer mejor los json [JsonViewer.stack](https://jsonviewer.stack.hu)
+
+El router y el viewset se usan para modelos que no estan compuestos de dos o mas entidades.
+Por ejemplo el path de comentario tiene un path complejo
