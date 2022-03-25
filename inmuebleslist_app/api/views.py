@@ -9,12 +9,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsComentarioUserOrReadOnly
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+from .throttling import ComentarioCreateThrottle, ComentarioListThrottle
 
 
 class ComentarioCreate(generics.CreateAPIView):
     serializer_class = ComentarioSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ComentarioCreateThrottle]
 
     def get_queryset(self):
         return Comentario.objects.all()
@@ -36,7 +38,7 @@ class ComentarioCreate(generics.CreateAPIView):
         else:
             edificacion.avg_calificacion = (
                 serializer.validated_data['calificacion'] + edificacion.avg_calificacion) / 2
-            
+
         edificacion.number_calificacion = edificacion.number_calificacion + 1
         edificacion.save()
 
@@ -47,7 +49,7 @@ class ComentarioList(generics.ListCreateAPIView):
     # queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
     # permission_classes = [IsAuthenticated]
-    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    throttle_classes = [ComentarioListThrottle]
 
     def get_queryset(self):
         # kwargs captura todas las propiedades que me manda el cliente
@@ -59,7 +61,8 @@ class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
     permission_classes = [IsComentarioUserOrReadOnly]
-    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'comentario-detail'
 
 
 class EmpresaVS(viewsets.ModelViewSet):
@@ -70,7 +73,7 @@ class EmpresaVS(viewsets.ModelViewSet):
 
 class EdificacionAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
-    
+
     # APIView reconoce que la funcion de nombre get, utiliza el request.method == 'GET'
     def get(self, request):
         inmuebles = Edificacion.objects.all()
