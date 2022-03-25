@@ -13,6 +13,18 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, Scoped
 from .throttling import ComentarioCreateThrottle, ComentarioListThrottle
 
 
+class UsuarioComentario(generics.ListAPIView):
+    serializer_class = ComentarioSerializer
+    
+    # def get_queryset(self):
+    #     username = self.kwargs['username']
+    #     return Comentario.objects.filter(comentario_user__username=username)
+    
+    def get_queryset(self):
+        username = self.request.query_params.get('username', None)
+        return Comentario.objects.filter(comentario_user__username=username)
+
+
 class ComentarioCreate(generics.CreateAPIView):
     serializer_class = ComentarioSerializer
     permission_classes = [IsAuthenticated]

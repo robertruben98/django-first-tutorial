@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (EdificacionAV, EdificacionDetalleAV,
-                    ComentarioList, ComentarioDetail, ComentarioCreate, EmpresaVS)
+                    ComentarioList, ComentarioDetail, ComentarioCreate, EmpresaVS, UsuarioComentario)
 
 router = DefaultRouter()
 router.register('empresa', EmpresaVS, basename='empresa')
@@ -19,4 +19,8 @@ urlpatterns = [
          ComentarioList.as_view(), name='comentario-list'),
     path('edificacion/comentario/<int:pk>',
          ComentarioDetail.as_view(), name='comentario-detail'),
+#     path('edificacion/comentarios/<str:username>/',
+#          UsuarioComentario.as_view(), name='usuario-comentario-detail'),
+    path('edificacion/comentarios/',
+         UsuarioComentario.as_view(), name='usuario-comentario-detail'),
 ]
