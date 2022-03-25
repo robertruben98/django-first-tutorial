@@ -8,11 +8,12 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
-from .permissions import AdminOrReadOnly, ComentarioUserOrReadOnly
+from .permissions import IsAdminOrReadOnly, IsComentarioUserOrReadOnly
 
 
 class ComentarioCreate(generics.CreateAPIView):
     serializer_class = ComentarioSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Comentario.objects.all()
@@ -55,16 +56,18 @@ class ComentarioList(generics.ListCreateAPIView):
 class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
-    permission_classes = [ComentarioUserOrReadOnly]
+    permission_classes = [IsComentarioUserOrReadOnly]
 
 
 class EmpresaVS(viewsets.ModelViewSet):
-    permission_classes = [AdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
 
 
 class EdificacionAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
+    
     # APIView reconoce que la funcion de nombre get, utiliza el request.method == 'GET'
     def get(self, request):
         inmuebles = Edificacion.objects.all()
@@ -81,6 +84,7 @@ class EdificacionAV(APIView):
 
 
 class EdificacionDetalleAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
 
     def get(self, request, pk):
         try:
