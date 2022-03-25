@@ -41,3 +41,7 @@ Json Web Token de seguridad tiene:
     token access: es valido durante 24 horas. Permite consultar la data y hacer las operaciones desde el backend
 
     [JWT](https://jwt.io) Para ver la informacion de los tokens
+
+
+Throttling
+    Impone restricciones a los request de los usuarios. Puede limitar la cantidad de request por minuto de un usuario

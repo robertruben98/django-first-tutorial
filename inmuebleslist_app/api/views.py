@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsComentarioUserOrReadOnly
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 
 class ComentarioCreate(generics.CreateAPIView):
@@ -45,7 +46,8 @@ class ComentarioCreate(generics.CreateAPIView):
 class ComentarioList(generics.ListCreateAPIView):
     # queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
     def get_queryset(self):
         # kwargs captura todas las propiedades que me manda el cliente
@@ -57,6 +59,7 @@ class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
     permission_classes = [IsComentarioUserOrReadOnly]
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
 
 class EmpresaVS(viewsets.ModelViewSet):
