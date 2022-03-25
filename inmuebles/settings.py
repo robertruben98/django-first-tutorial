@@ -140,6 +140,11 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.BasicAuthentication'
     # ]
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication'
+        # 'rest_framework.authentication.TokenAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
+}
+
+SIMPLE_JWT = {
+    'ROTATE_REFRESH_TOKENS': True # obliga que se genere un nuevo token por cada token que se haya generado
 }

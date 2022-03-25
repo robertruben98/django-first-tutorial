@@ -20,3 +20,24 @@ El router y el viewset se usan para modelos que no estan compuestos de dos o mas
 Por ejemplo el path de comentario tiene un path complejo
 
 Utilizando postman se pasan las credenciales en Authorization como Basic Auth, y se hace el request
+
+Json Web Token de seguridad tiene:
+    header: { 
+        tipo token
+        algoritmo
+    }
+
+    payload: {
+        claims: {
+            usernamen....
+        }
+    }
+
+    signature: {
+        header, payload, secret-phrase
+    }
+
+    token refresh: es valido durante 5 minutos. Es un utilitario para obtener nuevos token de access
+    token access: es valido durante 24 horas. Permite consultar la data y hacer las operaciones desde el backend
+
+    [JWT](https://jwt.io) Para ver la informacion de los tokens
