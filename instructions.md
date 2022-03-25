@@ -45,3 +45,7 @@ Json Web Token de seguridad tiene:
 
 Throttling
     Impone restricciones a los request de los usuarios. Puede limitar la cantidad de request por minuto de un usuario
+
+
+Paginacion con Limit and Offset
+    Ejemplo: 100 Records, offset = 60, limit = 5 ----> Records de mi paginacion: desde la posicion 61 hasta 66
